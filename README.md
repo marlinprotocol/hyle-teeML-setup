@@ -4,6 +4,9 @@
 ### Install Docker
 To install visit the Docker [website](https://www.docker.com/).
 
+# CPU Architecture
+This setup is for [`amd64` architecture](https://https://en.wikipedia.org/wiki/X86-64). If you want to setup on a arm-based machine then change `amd64` to `arm64` at all the places.
+
 ## Build the Enclave Builder image
 Run these commands in the `/hyle-teeML-setup` directory.
 ```bash!
