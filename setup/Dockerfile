@@ -45,7 +45,6 @@ RUN chmod +x setup.sh
 COPY ./ml-http-server/ /app
 
 # Install any needed packages specified in requirements.txt
-# RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 RUN pip install --no-cache-dir -r requirements.txt
 RUN chmod +x ./http-server.py
 
