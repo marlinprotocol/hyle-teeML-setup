@@ -1,0 +1,10 @@
+venv
+tmp
+FERPlus
+*.json
+*.onnx
+*.pkl
+.python-version
+__pycache__
+.ipynb_checkpoints
+enclave
