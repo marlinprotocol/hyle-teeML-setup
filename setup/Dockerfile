@@ -1,11 +1,17 @@
 # Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
+# Install wget and other necessary packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    net-tools \
+    iptables \
+    iproute2 \
+    wget \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 # Set the working directory in the container
 WORKDIR /app
-
-# Install wget and other necessary packages
-RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
 # supervisord to manage programs
 RUN wget -O supervisord http://public.artifacts.marlin.pro/projects/enclaves/supervisord_master_linux_amd64
