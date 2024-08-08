@@ -32,16 +32,19 @@ app = Flask(__name__)
 def predict():
     data = request.get_json()
     image = data['image']
-    result = prediction(image, model)
-    result_bytes = str(result).encode()
-    signature = private_key.sign(result_bytes)
-    signature_base64 = b64encode(signature).decode('utf-8')
+    prediction_result = prediction(image, model)
     image_hash = sha256(str(image).encode()).hexdigest()
     timestamp = datetime.utcnow().isoformat()
+
+    data_to_sign = f"{str(prediction_result)}{image_hash}{timestamp}"
+
+    data_to_sign_bytes = data_to_sign.encode()
+    signature = private_key.sign(data_to_sign_bytes)
+    signature_base64 = b64encode(signature).decode('utf-8')
     return jsonify({
-        'prediction': result.tolist(),
+        'prediction': prediction_result.tolist(),
         'attestation': signature_base64,
-        'image_hash': image_hash,
+        'image_identifier': image_hash,
         'timestamp': timestamp
     })
 
