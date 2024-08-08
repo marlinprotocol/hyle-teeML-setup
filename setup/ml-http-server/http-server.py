@@ -1,6 +1,8 @@
 import pandas as pd
 import joblib
 from flask import Flask, request, jsonify
+from cryptography.hazmat.primitives.asymmetric import ed25519
+from base64 import b64encode
 
 def prediction(input, model):
     input_df = pd.DataFrame([input])
@@ -11,15 +13,28 @@ def prediction(input, model):
 print("Loading XGBClassifier...")
 model = joblib.load("serialized_optimized.pkl")
 
+# Load the secret key from the id.sec file
+with open("/app/id.sec", "rb") as key_file:
+    secret_key_bytes = key_file.read()
+
+# The secret key consists of 32 bytes for the private scalar and 32 bytes for the public key.
+private_scalar = secret_key_bytes[:32]
+public_key_bytes = secret_key_bytes[32:]
+
+# Create a private key object
+private_key = ed25519.Ed25519PrivateKey.from_private_bytes(private_scalar)
+
 app = Flask(__name__)
 
 @app.route('/prediction', methods=['POST'])
 def predict():
     data = request.get_json()
     image = data['image']
-    print(image)
     result = prediction(image, model)
-    return jsonify({'prediction': result.tolist()})
+    result_bytes = str(result).encode()
+    signature = private_key.sign(result_bytes)
+    signature_base64 = b64encode(signature).decode('utf-8')
+    return jsonify({'prediction': result.tolist(), 'attestation': signature_base64})
 
 # Comment out or remove below lines to run in prod
 # if __name__ == '__main__':

@@ -21,7 +21,7 @@ RUN chmod +x supervisord
 RUN wget -O ip-to-vsock-transparent http://public.artifacts.marlin.pro/projects/enclaves/ip-to-vsock-transparent_v1.0.0_linux_amd64
 RUN chmod +x ip-to-vsock-transparent
 
-# key generator to generate static keys
+# key generator to generate ed25519 static keys
 RUN wget -O keygen http://public.artifacts.marlin.pro/projects/enclaves/keygen_v1.0.0_linux_amd64
 RUN chmod +x keygen
 

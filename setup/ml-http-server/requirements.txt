@@ -1,3 +1,4 @@
+cryptography==42.0.8
 requests==2.32.3
 xgboost==2.1.0
 pandas
