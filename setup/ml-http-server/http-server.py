@@ -3,6 +3,8 @@ import joblib
 from flask import Flask, request, jsonify
 from cryptography.hazmat.primitives.asymmetric import ed25519
 from base64 import b64encode
+from hashlib import sha256
+from datetime import datetime
 
 def prediction(input, model):
     input_df = pd.DataFrame([input])
@@ -34,7 +36,14 @@ def predict():
     result_bytes = str(result).encode()
     signature = private_key.sign(result_bytes)
     signature_base64 = b64encode(signature).decode('utf-8')
-    return jsonify({'prediction': result.tolist(), 'attestation': signature_base64})
+    image_hash = sha256(str(image).encode()).hexdigest()
+    timestamp = datetime.utcnow().isoformat()
+    return jsonify({
+        'prediction': result.tolist(),
+        'attestation': signature_base64,
+        'image_hash': image_hash,
+        'timestamp': timestamp
+    })
 
 # Comment out or remove below lines to run in prod
 # if __name__ == '__main__':
