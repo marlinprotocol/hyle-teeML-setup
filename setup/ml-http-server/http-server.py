@@ -50,7 +50,7 @@ def predict():
 
 # Comment out or remove below lines to run in prod
 # if __name__ == '__main__':
-#     app.run(debug=True)
+#     app.run(debug=True, host='127.0.0.1', port=5001)
 
 # To run the app in production, use the following command:
-# gunicorn -w 1 -b 127.0.0.1:5000 http-server:app
+# gunicorn -w 1 -b 127.0.0.1:5001 http-server:app
